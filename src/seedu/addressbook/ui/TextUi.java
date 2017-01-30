@@ -1,7 +1,5 @@
 package seedu.addressbook.ui;
 
-import static seedu.addressbook.common.Messages.*;
-
 import seedu.addressbook.commands.CommandResult;
 import seedu.addressbook.data.person.ReadOnlyPerson;
 import seedu.addressbook.ui.Formatter;
@@ -74,7 +72,7 @@ public class TextUi {
             fullInputLine = in.nextLine();
         }
 
-        formatter.showToUser("[Command entered:" + fullInputLine + "]");
+        showToUser("[Command entered:" + fullInputLine + "]");
         return fullInputLine;
     }
 
