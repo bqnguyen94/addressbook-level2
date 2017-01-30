@@ -19,6 +19,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 
 /**
  * Represents the file used to store address book data.
@@ -74,16 +76,19 @@ public class StorageFile {
 
         path = Paths.get(filePath);
         if (!isValidPath(path)) {
-            throw new InvalidStorageFilePathException("Storage file should end with '.txt'");
+            throw new InvalidStorageFilePathException("Invalid storage file path! The file must exist and its path should end with '.txt'");
         }
     }
 
     /**
      * Returns true if the given path is acceptable as a storage file.
-     * The file path is considered acceptable if it ends with '.txt'
+     * The file path is considered acceptable if the file exists, is
+     * not a directory and its path ends with '.txt'
      */
     private static boolean isValidPath(Path filePath) {
-        return filePath.toString().endsWith(".txt");
+    	boolean isExistingFile = Files.exists(filePath, LinkOption.NOFOLLOW_LINKS) 
+    								&& !Files.isDirectory(filePath, LinkOption.NOFOLLOW_LINKS);
+        return isExistingFile && filePath.toString().endsWith(".txt");
     }
 
     /**
@@ -96,6 +101,10 @@ public class StorageFile {
         /* Note: Note the 'try with resource' statement below.
          * More info: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
          */
+    	if (!isValidPath(path)) {
+    		String alertFileNotFound = "Storage file not found! It is either moved or deleted. A new storage file will be created.";
+    		throw new StorageOperationException(alertFileNotFound);
+    	}
         try (final Writer fileWriter =
                      new BufferedWriter(new FileWriter(path.toFile()))) {
 
