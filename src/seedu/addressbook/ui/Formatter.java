@@ -20,15 +20,6 @@ public class Formatter {
     private static final String MESSAGE_INDEXED_LIST_ITEM = "\t%1$d. %2$s";
     
     /**
-     * Return a line message formatted with LINE_PREFIX
-     * @param message is the input message
-     * @return the formatted line message
-     */
-    public String getFormattedLineMessage(String message) {
-    	return LINE_PREFIX + message;
-    }
-    
-    /**
      * Return a message formatted with LS and LINE_PREFIX
      * @param message is the input message
      * @return the formatted message
@@ -54,14 +45,14 @@ public class Formatter {
      */
     public String getWelcomeMessage(String version, String storageFilePath) {
         String storageFileInfo = String.format(MESSAGE_USING_STORAGE_FILE, storageFilePath);
-        return(
-        		DIVIDER +
-        		DIVIDER +
-        		MESSAGE_WELCOME +
-        		version +
-        		MESSAGE_PROGRAM_LAUNCH_ARGS_USAGE +
-        		storageFileInfo +
-        		DIVIDER);
+	    return(
+	    		DIVIDER + "\n" +
+	    		DIVIDER + "\n" +
+	    		MESSAGE_WELCOME + "\n" +
+	    		version + "\n" +
+	    		MESSAGE_PROGRAM_LAUNCH_ARGS_USAGE + "\n" +
+	    		storageFileInfo + "\n" +
+	    		DIVIDER);
     }
     
     /**
@@ -86,7 +77,7 @@ public class Formatter {
      * @return formatted result message
      */
     public String getResultMessage(String resultMessage) {
-        return resultMessage + DIVIDER;
+        return resultMessage + LS + DIVIDER;
     }
     
     /** Formats a list of strings as a viewable indexed list. */
