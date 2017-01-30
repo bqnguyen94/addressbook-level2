@@ -35,7 +35,7 @@ public class TextUi {
     public TextUi(InputStream in, PrintStream out) {
         this.in = new Scanner(in);
         this.out = out;
-        this.formatter = new Formatter();
+        this.formatter = new Formatter(out);
     }
 
     /**
@@ -66,7 +66,7 @@ public class TextUi {
      * @return command (full line) entered by the user
      */
     public String getUserCommand() {
-        showToUser("Enter command: ");
+        out.print("Enter command: ");
         String fullInputLine = in.nextLine();
 
         // silently consume all ignored lines
@@ -74,28 +74,26 @@ public class TextUi {
             fullInputLine = in.nextLine();
         }
 
-        showToUser("[Command entered: " + fullInputLine + " ]");
+        formatter.showToUser("[Command entered:" + fullInputLine + "]");
         return fullInputLine;
     }
 
     public void showWelcomeMessage(String version, String storageFilePath) {
-        showToUser(formatter.getWelcomeMessage(version, storageFilePath));
+        formatter.showWelcomeMessage(version, storageFilePath);
     }
 
     public void showGoodbyeMessage() {
-        showToUser(formatter.getGoodbyeMessage());
+        formatter.showGoodbyeMessage();
     }
 
 
     public void showInitFailedMessage() {
-        showToUser(formatter.getInitFailedMessage());
+        formatter.showInitFailedMessage();
     }
 
     /** Shows message(s) to the user */
     public void showToUser(String... message) {
-        for (String m : message) {
-            out.println(formatter.getMessage(m));
-        }
+        formatter.showToUser(message);
     }
 
     /**
@@ -107,7 +105,7 @@ public class TextUi {
         if (resultPersons.isPresent()) {
             showPersonListView(resultPersons.get());
         }
-        showToUser(formatter.getResultMessage(result.feedbackToUser));
+        formatter.showResultMessage(result.feedbackToUser);
     }
 
     /**
@@ -124,6 +122,6 @@ public class TextUi {
 
     /** Shows a list of strings to the user, formatted as an indexed list. */
     private void showToUserAsIndexedList(List<String> list) {
-        showToUser(formatter.getIndexedListForViewing(list));
+        formatter.showToUserAsIndexedList(list);
     }
 }
