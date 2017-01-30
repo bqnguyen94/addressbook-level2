@@ -76,7 +76,7 @@ public class StorageFile {
 
         path = Paths.get(filePath);
         if (!isValidPath(path)) {
-            throw new InvalidStorageFilePathException("Invalid storage file path! The file must exist and its path should end with '.txt'");
+            throw new InvalidStorageFilePathException("Invalid storage file path! It should end with '.txt'");
         }
     }
 
@@ -86,9 +86,14 @@ public class StorageFile {
      * not a directory and its path ends with '.txt'
      */
     private static boolean isValidPath(Path filePath) {
-    	boolean isExistingFile = Files.exists(filePath, LinkOption.NOFOLLOW_LINKS) 
-    								&& !Files.isDirectory(filePath, LinkOption.NOFOLLOW_LINKS);
-        return isExistingFile && filePath.toString().endsWith(".txt");
+        return filePath.toString().endsWith(".txt");
+    }
+    
+    /**
+     * Returns true if the storage file exists and is not a directory
+     */
+    private boolean isValidStorageFile() {
+    	return !Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) && Files.exists(path, LinkOption.NOFOLLOW_LINKS);
     }
 
     /**
@@ -101,7 +106,7 @@ public class StorageFile {
         /* Note: Note the 'try with resource' statement below.
          * More info: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
          */
-    	if (!isValidPath(path)) {
+    	if (!isValidStorageFile()) {
     		String alertFileNotFound = "Storage file not found! It is either moved or deleted. A new storage file will be created.";
     		throw new StorageOperationException(alertFileNotFound);
     	}
