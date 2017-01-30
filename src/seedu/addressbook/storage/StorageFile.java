@@ -92,7 +92,7 @@ public class StorageFile {
     /**
      * Returns true if the storage file exists and is not a directory
      */
-    private boolean isValidStorageFile() {
+    private boolean isExistingStorageFile() {
     	return !Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) && Files.exists(path, LinkOption.NOFOLLOW_LINKS);
     }
 
@@ -106,8 +106,8 @@ public class StorageFile {
         /* Note: Note the 'try with resource' statement below.
          * More info: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
          */
-    	if (!isValidStorageFile()) {
-    		String alertFileNotFound = "Storage file not found! It is either moved or deleted. A new storage file will be created.";
+    	if (!isExistingStorageFile()) {
+    		String alertFileNotFound = "Storage file not found! It is either moved or deleted.";
     		throw new StorageOperationException(alertFileNotFound);
     	}
         try (final Writer fileWriter =
