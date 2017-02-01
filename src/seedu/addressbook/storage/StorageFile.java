@@ -1,6 +1,7 @@
 package seedu.addressbook.storage;
 
 import seedu.addressbook.data.AddressBook;
+import seedu.addressbook.ui.TextUi;
 import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.storage.jaxb.AdaptedAddressBook;
 
@@ -29,6 +30,8 @@ public class StorageFile {
 
     /** Default file path used if the user doesn't provide the file name. */
     public static final String DEFAULT_STORAGE_FILEPATH = "addressbook.txt";
+    
+    private final TextUi ui;
 
     /* Note: Note the use of nested classes below.
      * More info https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html
@@ -78,6 +81,8 @@ public class StorageFile {
         if (!isValidPath(path)) {
             throw new InvalidStorageFilePathException("Invalid storage file path! It should end with '.txt'");
         }
+        
+        this.ui = new TextUi();
     }
 
     /**
@@ -107,9 +112,9 @@ public class StorageFile {
          * More info: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
          */
     	if (!isExistingStorageFile()) {
-    		String alertFileNotFound = "Storage file not found! It is either moved or deleted.";
-    		throw new StorageOperationException(alertFileNotFound);
+    		ui.showToUser("Storage file not found! It is either deleted or moved. A new storage file will be created!");
     	}
+    	
         try (final Writer fileWriter =
                      new BufferedWriter(new FileWriter(path.toFile()))) {
 
