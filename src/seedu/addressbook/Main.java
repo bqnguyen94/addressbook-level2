@@ -1,6 +1,7 @@
 package seedu.addressbook;
 
 import seedu.addressbook.data.person.ReadOnlyPerson;
+import seedu.addressbook.data.tag.Tagging;
 import seedu.addressbook.storage.StorageFile.*;
 
 import seedu.addressbook.commands.*;
@@ -72,9 +73,16 @@ public class Main {
 
     /** Prints the Goodbye message and exits. */
     private void exit() {
+    	showSessionTaggingsToUser();
         ui.showGoodbyeMessage();
         System.exit(0);
     }
+
+	private void showSessionTaggingsToUser() {
+		for (Tagging tagging : addressBook.getSessionTaggings()) {
+    		ui.showToUser(tagging.toString());
+    	}
+	}
 
     /** Reads the user command and executes it, until the user issues the exit command.  */
     private void runCommandLoopUntilExitCommand() {

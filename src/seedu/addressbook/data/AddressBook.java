@@ -5,11 +5,13 @@ import seedu.addressbook.data.person.UniquePersonList.*;
 import seedu.addressbook.data.tag.UniqueTagList;
 import seedu.addressbook.data.tag.UniqueTagList.*;
 import seedu.addressbook.data.tag.Tag;
+import seedu.addressbook.data.tag.Tagging;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 
 /**
  * Represents the entire address book. Contains the data of the address book.
@@ -22,6 +24,7 @@ public class AddressBook {
 
     private final UniquePersonList allPersons;
     private final UniqueTagList allTags; // can contain tags not attached to any person
+    private ArrayList<Tagging> sessionTaggings;
 
     /**
      * Creates an empty address book.
@@ -29,6 +32,7 @@ public class AddressBook {
     public AddressBook() {
         allPersons = new UniquePersonList();
         allTags = new UniqueTagList();
+        sessionTaggings = new ArrayList<Tagging>();
     }
 
     /**
@@ -41,6 +45,7 @@ public class AddressBook {
     public AddressBook(UniquePersonList persons, UniqueTagList tags) {
         this.allPersons = new UniquePersonList(persons);
         this.allTags = new UniqueTagList(tags);
+        this.sessionTaggings = new ArrayList<Tagging>();
         for (Person p : allPersons) {
             syncTagsWithMasterList(p);
         }
@@ -89,6 +94,29 @@ public class AddressBook {
     public void addTag(Tag toAdd) throws DuplicateTagException {
         allTags.add(toAdd);
     }
+    
+    /**
+     * Adds a tagging action done in the current session to the address book.
+     * 
+     * @param person the person to be tagged.
+     * @param tag the tag associated with the person.
+     * 
+     * @throws PersonNotFoundException if no such Person could be found.
+     * @throws TagNotFoundException if no such Tag could be found.
+     */
+    public void addTagging(ReadOnlyPerson person, Tag tag) throws PersonNotFoundException, TagNotFoundException {
+    	if (!allPersons.contains(person)) {
+    		throw new PersonNotFoundException();
+    	}
+    	
+    	if (!allTags.contains(tag)) {
+    		throw new TagNotFoundException();
+    	}
+    	
+    	Tagging tagging = new Tagging(person, tag, Tagging.TaggingType.ADD);
+    	
+    	sessionTaggings.add(tagging);
+    }
 
     /**
      * Checks if an equivalent person exists in the address book.
@@ -121,6 +149,29 @@ public class AddressBook {
     public void removeTag(Tag toRemove) throws TagNotFoundException {
         allTags.remove(toRemove);
     }
+    
+    /**
+     * Removes a tagging action done in the current session to the address book.
+     * 
+     * @param person the person to be tagged.
+     * @param tag the tag associated with the person.
+     * 
+     * @throws PersonNotFoundException if no such Person could be found.
+     * @throws TagNotFoundException if no such Tag could be found.
+     */
+    public void removeTagging(ReadOnlyPerson person, Tag tag) throws PersonNotFoundException, TagNotFoundException {
+    	if (!allPersons.contains(person)) {
+    		throw new PersonNotFoundException();
+    	}
+    	
+    	if (!allTags.contains(tag)) {
+    		throw new TagNotFoundException();
+    	}
+    	
+    	Tagging tagging = new Tagging(person, tag, Tagging.TaggingType.DELETE);
+    	
+    	sessionTaggings.add(tagging);
+    }
 
     /**
      * Clears all persons and tags from the address book.
@@ -142,5 +193,12 @@ public class AddressBook {
      */
     public UniqueTagList getAllTags() {
         return new UniqueTagList(allTags);
+    }
+    
+    /**
+     * Returns sessionTaggings
+     */
+    public ArrayList<Tagging> getSessionTaggings() {
+    	return sessionTaggings;
     }
 }
