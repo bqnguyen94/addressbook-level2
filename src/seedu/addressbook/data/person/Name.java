@@ -69,13 +69,17 @@ public class Name {
     
     /**
      * Returns true of the other name is very similar to this name.
-     * Two names are considered similar if their lowercase strings match.
+     * Two names are considered similar if their lowercase strings without
+     * match, regardless of the special characters.
      */
      public boolean isSimilar(Name other) {
-    	 if (true) {
+    	 if (other == null) {
     		 return false;
     	 }
-    	 return true;
+    	 
+    	 String fullNameNoSpecialCharsLower = fullName.replaceAll("[^\\w\\s]","").toLowerCase();
+    	 String fullNameNoSpecialCharsLowerOther = fullName.replaceAll("[^\\w\\s]","").toLowerCase();
+    	 return fullNameNoSpecialCharsLower.equals(fullNameNoSpecialCharsLowerOther);
      }
 
 }

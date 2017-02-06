@@ -16,6 +16,7 @@ public class NameTest {
 	private Name upperAndLowerName;
 	private Name subsetName;
 	private Name supersetName;
+	private Name specialCharsName;
 	
 	@Before
 	public void setup() throws IllegalValueException {
@@ -27,6 +28,8 @@ public class NameTest {
 		upperAndLowerName = new Name("uvuvwEvwEvwE onyEtEnyEvwE ugwEmuhwEm ossas");
 		subsetName = new Name("Ossas");
 		supersetName = new Name("Uvuvwevwevwe Onyetenyevwe Ugwemuhwem Uvuvwevwevwe Onyetenyevwe Ugwemuhwem Ossas");
+		name = new Name("Uvuvwevwevwe Onyetenyevwe Ugwemuhwem Ossas");
+		specialCharsName = new Name("Uvuvwevwevwe...... Onyetenyevwe...... Ugwemuhwem.., Ossas");
 	}
 	
 	@Test
@@ -54,5 +57,10 @@ public class NameTest {
 	@Test
 	public void isSimilar_supersetName_returnsFalse() {
 		assertFalse(name.isSimilar(supersetName));
+	}
+	
+	@Test
+	public void isSimilar_specialCharsName_returnsTrue() {
+		assertTrue(name.isSimilar(specialCharsName));
 	}
 }
